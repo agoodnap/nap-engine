@@ -10,6 +10,6 @@ You're gonna have to link up SFML, here's a quick little guide:
 - Open the project with VisualStudio/Rider
 - Add {your SFML path}/include to **Additional Include Directories**
 - Add {your SFML path}/lib to **Additional Library Directories**
-- Add sfml-graphics.lib, sfml-window.lib and sfml-system.lib or their debug-equivalent (depending on your configuration) to **Additional Dependencies**
+- Add sfml-graphics.lib, sfml-window.lib, sfml-audio.lib and sfml-system.lib or their debug-equivalent (depending on your configuration) to **Additional Dependencies**
 
 That should allow you to build the project. Let me know if there's any problem.
