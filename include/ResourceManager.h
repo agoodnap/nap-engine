@@ -20,7 +20,7 @@ public:
     static ResourceManager& getInstance();
 
     bool loadTexture(const std::string& id, const std::string& path, const sf::IntRect& area = sf::IntRect());
-    void freeTexture(const std::string id);
+    void freeTexture(const std::string& id);
     std::shared_ptr<sf::Texture> getTexture(const std::string& id);
 
     bool loadSoundBuffer(const std::string& id, const std::string& path);

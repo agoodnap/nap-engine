@@ -112,5 +112,5 @@ public:
     bool setIsEnabled(const bool& value);
 
     sf::Vector2f getVectorBetween(const GameObject& other) const;
-    sf::Vector2f getVectorBetween(std::shared_ptr<GameObject> other) const;
+    sf::Vector2f getVectorBetween(const std::shared_ptr<GameObject>& other) const;
 };

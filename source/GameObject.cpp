@@ -40,7 +40,7 @@ sf::Vector2f GameObject::getVectorBetween(const GameObject& other) const
     return other.getPosition() - getPosition();
 }
 
-sf::Vector2f GameObject::getVectorBetween(std::shared_ptr<GameObject> other) const
+sf::Vector2f GameObject::getVectorBetween(const std::shared_ptr<GameObject>& other) const
 {
     return other->getPosition() - getPosition();
 }

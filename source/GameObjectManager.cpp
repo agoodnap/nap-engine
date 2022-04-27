@@ -29,7 +29,7 @@ std::weak_ptr<GameObject> GameObjectManager::addGameObject(const std::string& na
     return newObjPtr;
 }
 
-std::weak_ptr<GameObject> GameObjectManager::addGameObject(std::shared_ptr<GameObject> newObject)
+std::weak_ptr<GameObject> GameObjectManager::addGameObject(const std::shared_ptr<GameObject>& newObject)
 {
     if (m_gameObjects.find(newObject->getName()) != m_gameObjects.end())
     {
@@ -48,7 +48,7 @@ std::weak_ptr<GameObject> GameObjectManager::getGameObject(const std::string& na
 std::vector<std::weak_ptr<GameObject>> GameObjectManager::getGameObjects() const
 {
     std::vector<std::weak_ptr<GameObject>> returnVector;
-    for (auto obj : m_gameObjects)
+    for (const auto& obj : m_gameObjects)
     {
         returnVector.push_back(obj.second);
     }
@@ -59,7 +59,7 @@ std::vector<std::weak_ptr<GameObject>> GameObjectManager::getGameObjects() const
 std::vector<std::weak_ptr<GameObject>> GameObjectManager::getGameObjectsByName(std::string name) const
 {
     std::vector<std::weak_ptr<GameObject>> returnVector;
-    for (auto obj : m_gameObjects)
+    for (const auto& obj : m_gameObjects)
     {
         if (obj.first.find(name) != std::string::npos)
         {

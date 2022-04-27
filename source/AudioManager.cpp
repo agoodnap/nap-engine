@@ -2,12 +2,8 @@
 
 #include <string>
 
-using namespace sf;
-
 AudioManager::AudioManager()
-{
-
-}
+= default;
 
 AudioManager::~AudioManager()
 {
@@ -21,12 +17,12 @@ AudioManager& AudioManager::getInstance()
 	return instance;
 }
 
-Sound& AudioManager::getSoundBuffer()
+sf::Sound& AudioManager::getSoundBuffer()
 {
 	return m_Sound;
 }
 
-void AudioManager::playSound(const SoundBuffer& buffer)
+void AudioManager::playSound(const sf::SoundBuffer& buffer)
 {
 	m_Sound.stop();
 	m_Sound.setBuffer(buffer);
@@ -34,7 +30,7 @@ void AudioManager::playSound(const SoundBuffer& buffer)
 	m_Sound.play();
 }
 
-Music& AudioManager::getMusic()
+sf::Music& AudioManager::getMusic()
 {
 	return m_Music;
 }

@@ -27,7 +27,7 @@ public:
     static GameStateManager& getInstance();
     bool init(const std::string& startStateName);
     bool isRunning() const;
-    void update(const float deltaTime);
+    void update(const float deltaTime) const;
     void exit() const;
     bool setState(const std::string& stateName);
     std::shared_ptr<State> getCurrentState();

@@ -1,8 +1,6 @@
 #include "ConvexShapeComponent.h"
 #include "GameObject.h"
 
-using namespace sf;
-
 ConvexShapeComponent::ConvexShapeComponent(GameObject& parent) : ShapeComponent(parent),
                                                                  m_shape(std::make_shared<sf::ConvexShape>())
 {
@@ -11,7 +9,7 @@ ConvexShapeComponent::ConvexShapeComponent(GameObject& parent) : ShapeComponent(
 ConvexShapeComponent::~ConvexShapeComponent()
 = default;
 
-void ConvexShapeComponent::setPointCount(const int& count)
+void ConvexShapeComponent::setPointCount(const int& count) const
 {
     if (m_shape)
         m_shape->setPointCount(count);

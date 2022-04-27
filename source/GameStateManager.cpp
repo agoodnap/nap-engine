@@ -2,8 +2,6 @@
 #include "Renderer.h"
 #include "PhysicsManager.h"
 
-using namespace sf;
-
 GameStateManager& GameStateManager::getInstance()
 {
     static GameStateManager instance;
@@ -26,12 +24,12 @@ bool GameStateManager::isRunning() const
     return Renderer::getInstance().isWindowOpen() && m_currentState != nullptr;
 }
 
-void GameStateManager::update(float deltaTime)
+void GameStateManager::update(float deltaTime) const
 {
-    Event event;
+    sf::Event event{};
     while (Renderer::getInstance().pollEvent(event))
     {
-        if (event.type == Event::Closed)
+        if (event.type == sf::Event::Closed)
         {
             Renderer::getInstance().closeWindow();
             exit();

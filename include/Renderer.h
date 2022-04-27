@@ -27,15 +27,15 @@ public:
 
     bool initWindow(unsigned const int windowX, unsigned const int windowY, const std::string& title);
     sf::RenderWindow& getWindow();
-    bool isWindowOpen();
+    bool isWindowOpen() const;
     bool pollEvent(sf::Event& event);
     void closeWindow();
     void setWindowSize(unsigned const int windowX, unsigned const int windowY);
     void clear();
     void display();
     sf::Vector2f getCenter() const;
-    void setCamera(std::shared_ptr<CameraComponent> camera);
-    void registerRenderComponent(std::shared_ptr<RenderComponent> component);
+    void setCamera(const std::shared_ptr<CameraComponent>& camera);
+    void registerRenderComponent(const std::shared_ptr<RenderComponent>& component);
     void cullExpiredComponents();
     void reorderRenderComponents();
 };

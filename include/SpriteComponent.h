@@ -15,13 +15,13 @@ public:
 	SpriteComponent(GameObject& parent);
 	~SpriteComponent() override;
 	void update(const float deltaTime) override;
-	void setScale(const float x, const float y);
-	void setSmooth(const bool value);
+	void setScale(const float x, const float y) const;
+	void setSmooth(const bool value) const;
 	void setTexture(std::shared_ptr<sf::Texture> texture);
-	void setColor(sf::Color color);
+	void setColor(sf::Color color) const;
 	std::shared_ptr<sf::Texture> getTexture();
-	void setOrigin(const float x, const float y);
-	sf::Vector2f getOrigin();
+	void setOrigin(const float x, const float y) const;
+	sf::Vector2f getOrigin() const;
 	std::shared_ptr<sf::Sprite> getSprite();
 
 	void setRotateWithParent(const bool val);

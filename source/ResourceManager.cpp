@@ -4,8 +4,6 @@
 
 #include "LayerComponent.h"
 
-using namespace sf;
-
 ResourceManager& ResourceManager::getInstance()
 {
     static ResourceManager instance;
@@ -21,9 +19,9 @@ ResourceManager::~ResourceManager()
     m_soundCache.clear();
 }
 
-bool ResourceManager::loadTexture(const std::string& id, const std::string& path, const IntRect& area)
+bool ResourceManager::loadTexture(const std::string& id, const std::string& path, const sf::IntRect& area)
 {
-    std::shared_ptr<Texture> newTex = std::make_shared<Texture>();
+    const std::shared_ptr<sf::Texture> newTex = std::make_shared<sf::Texture>();
     if (!newTex->loadFromFile(path, area))
     {
         return false;
@@ -33,7 +31,7 @@ bool ResourceManager::loadTexture(const std::string& id, const std::string& path
     return true;
 }
 
-void ResourceManager::freeTexture(const std::string id)
+void ResourceManager::freeTexture(const std::string& id)
 {
     if (m_textureCache.get(id))
     {
@@ -41,14 +39,14 @@ void ResourceManager::freeTexture(const std::string id)
     }
 }
 
-std::shared_ptr<Texture> ResourceManager::getTexture(const std::string& id)
+std::shared_ptr<sf::Texture> ResourceManager::getTexture(const std::string& id)
 {
     return m_textureCache.get(id);
 }
 
 bool ResourceManager::loadSoundBuffer(const std::string& id, const std::string& path)
 {
-    std::shared_ptr<SoundBuffer> newSound = std::make_shared<SoundBuffer>();
+    const std::shared_ptr<sf::SoundBuffer> newSound = std::make_shared<sf::SoundBuffer>();
     if (!newSound->loadFromFile(path))
     {
         std::cout << "Error while loading music" << std::endl;
@@ -68,7 +66,7 @@ void ResourceManager::freeSoundBuffer(const std::string& id)
     }
 }
 
-std::shared_ptr<SoundBuffer> ResourceManager::getSoundBuffer(const std::string& id)
+std::shared_ptr<sf::SoundBuffer> ResourceManager::getSoundBuffer(const std::string& id)
 {
     return m_soundCache.get(id);
 }

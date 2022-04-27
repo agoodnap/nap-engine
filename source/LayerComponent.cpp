@@ -11,7 +11,7 @@ void LayerComponent::update(float deltaTime)
 {
 }
 
-void LayerComponent::add(std::shared_ptr<sf::Sprite> sprite)
+void LayerComponent::add(const std::shared_ptr<sf::Sprite>& sprite)
 {
     m_sprites.push_back(sprite);
 }
@@ -39,7 +39,7 @@ void LayerComponent::setHeight(const int& height)
 std::vector<std::weak_ptr<sf::Drawable>> LayerComponent::getDrawables()
 {
     std::vector<std::weak_ptr<sf::Drawable>> result;
-    for (auto sprite : m_sprites)
+    for (const auto& sprite : m_sprites)
     {
         std::weak_ptr<sf::Drawable> weakSpr = sprite;
         result.push_back(weakSpr);

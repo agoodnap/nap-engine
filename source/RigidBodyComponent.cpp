@@ -3,11 +3,9 @@
 #include "RigidBodyComponent.h"
 #include "CollisionListener.h"
 
-using namespace sf;
-
 void RigidBodyComponent::update(float deltaTime)
 {
-    Vector2f forces{};
+    sf::Vector2f forces{};
     for (const auto& f : m_forces)
         forces += f;
 
@@ -26,7 +24,7 @@ sf::Vector2f RigidBodyComponent::getPosition() const
     return m_parent.getPosition();
 }
 
-void RigidBodyComponent::setPosition(const sf::Vector2f position)
+void RigidBodyComponent::setPosition(const sf::Vector2f position) const
 {
     m_parent.setPosition(position);
 }
@@ -100,7 +98,7 @@ void RigidBodyComponent::addImpulse(const sf::Vector2f& impulse)
 }
 
 
-void RigidBodyComponent::registerListener(const std::shared_ptr<CollisionListener> listener)
+void RigidBodyComponent::registerListener(const std::shared_ptr<CollisionListener>& listener)
 {
     m_listeners.push_back(listener);
 }

@@ -5,8 +5,6 @@
 #include "RenderComponent.h"
 #include "GameObject.h"
 
-using namespace sf;
-
 Renderer& Renderer::getInstance()
 {
     static Renderer instance;
@@ -24,16 +22,16 @@ Renderer::~Renderer()
 
 bool Renderer::initWindow(unsigned const int windowX, unsigned const int windowY, const std::string& title)
 {
-    m_window.create(VideoMode(windowX, windowY), title);
+    m_window.create(sf::VideoMode(windowX, windowY), title);
     return true;
 }
 
-RenderWindow& Renderer::getWindow()
+sf::RenderWindow& Renderer::getWindow()
 {
     return m_window;
 }
 
-bool Renderer::isWindowOpen()
+bool Renderer::isWindowOpen() const
 {
     return m_window.isOpen();
 }
@@ -45,7 +43,7 @@ bool Renderer::pollEvent(sf::Event& event)
         return false;
     }
 
-    auto result = m_window.pollEvent(event);
+    const auto result = m_window.pollEvent(event);
     
     return result;
 }
@@ -65,13 +63,13 @@ void Renderer::clear()
 
 void Renderer::setWindowSize(unsigned const int windowX, unsigned const int windowY)
 {
-    Vector2u newSize;
+    sf::Vector2u newSize;
     newSize.x = windowX;
     newSize.y = windowY;
     m_window.setSize(newSize);
 }
 
-void Renderer::draw(const Drawable& drawable, const RenderStates& states)
+void Renderer::draw(const sf::Drawable& drawable, const sf::RenderStates& states)
 {
     if (m_window.isOpen())
     {
@@ -79,7 +77,7 @@ void Renderer::draw(const Drawable& drawable, const RenderStates& states)
     }
 }
 
-bool orderSort(std::weak_ptr<RenderComponent> a, std::weak_ptr<RenderComponent> b)
+bool orderSort(const std::weak_ptr<RenderComponent>& a, const std::weak_ptr<RenderComponent>& b)
 {
     if (a.expired() || b.expired())
     {
@@ -107,16 +105,16 @@ void Renderer::display()
 
     for (auto obj = m_renderObjects.begin(); obj != m_renderObjects.end();)
     {
-        if (auto renderComp = obj->lock())
+        if (const auto renderComp = obj->lock())
         {
             if (renderComp->getParent().isEnabled())
             {
                 auto drawables = renderComp->getDrawables();
-                for (auto drawable : drawables)
+                for (const auto& drawable : drawables)
                 {
                     if (auto drawWeakPtr = drawable.lock())
                     {
-                        draw(*drawWeakPtr.get());
+                        draw(*drawWeakPtr);
                     }
                 }
             }
@@ -141,12 +139,12 @@ sf::Vector2f Renderer::getCenter() const
     return m_window.getView().getCenter();
 }
 
-void Renderer::setCamera(std::shared_ptr<CameraComponent> camera)
+void Renderer::setCamera(const std::shared_ptr<CameraComponent>& camera)
 {
     m_currentCam = std::weak_ptr<CameraComponent>(camera);
 }
 
-void Renderer::registerRenderComponent(std::shared_ptr<RenderComponent> component)
+void Renderer::registerRenderComponent(const std::shared_ptr<RenderComponent>& component)
 {
     const std::weak_ptr<RenderComponent> toInsert = component;
     m_renderObjects.push_back(toInsert);

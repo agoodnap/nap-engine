@@ -1,5 +1,4 @@
 #include "InputManager.h"
-using namespace sf;
 
 InputManager& InputManager::getInstance()
 {
@@ -20,7 +19,7 @@ bool InputManager::isKeyDown(const int keyCode)
         return false;
     }
 
-    const bool keyPressed = m_keyBoard.isKeyPressed((Keyboard::Key)keyCode);
+    const bool keyPressed = m_keyBoard.isKeyPressed(static_cast<sf::Keyboard::Key>(keyCode));
     setKeyPressed(keyCode, keyPressed);
     return keyPressed;
 }
@@ -38,7 +37,7 @@ bool InputManager::isKeyPressed(const int keyCode)
     }
 
     const bool keyPressedInMap = getKeyPressed(keyCode);
-    bool keyPressedCurrent = m_keyBoard.isKeyPressed((Keyboard::Key)keyCode);
+    const bool keyPressedCurrent = m_keyBoard.isKeyPressed(static_cast<sf::Keyboard::Key>(keyCode));
     setKeyPressed(keyCode, keyPressedCurrent);
     if (!keyPressedInMap && keyPressedCurrent)
     {
@@ -57,8 +56,8 @@ bool InputManager::isKeyReleased(const int keyCode)
         return false;
     }
 
-    bool keyPressedInMap = getKeyPressed(keyCode);
-    bool keyPressedCurrent = m_keyBoard.isKeyPressed((Keyboard::Key)keyCode);
+    const bool keyPressedInMap = getKeyPressed(keyCode);
+    const bool keyPressedCurrent = m_keyBoard.isKeyPressed(static_cast<sf::Keyboard::Key>(keyCode));
     setKeyPressed(keyCode, keyPressedCurrent);
     if (keyPressedInMap && !keyPressedCurrent)
     {
@@ -164,7 +163,7 @@ void InputManager::unbind(const std::string& action, const int playerIdx)
 
     if (!keyBinds.empty())
     {
-        for (const auto kBind : keyBinds)
+        for (const auto& kBind : keyBinds)
         {
             m_boundKeys.erase(kBind);
         }

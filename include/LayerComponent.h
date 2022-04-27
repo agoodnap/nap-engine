@@ -18,7 +18,7 @@ public:
     LayerComponent(GameObject& parent);
     ~LayerComponent() override;
     void update(float deltaTime) override;
-    void add(std::shared_ptr<sf::Sprite> sprite);
+    void add(const std::shared_ptr<sf::Sprite>& sprite);
     int getWidth() const;
     void setWidth(const int& width);
     int getHeight() const;

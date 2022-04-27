@@ -1,10 +1,10 @@
 #include "SpriteComponent.h"
+
+#include <utility>
 #include "GameObject.h"
 
-using namespace sf;
-
 SpriteComponent::SpriteComponent(GameObject& parent) : RenderComponent(parent),
-                                                       m_sprite(std::make_shared<sf::Sprite>()), m_texture(nullptr),
+                                                       m_texture(nullptr), m_sprite(std::make_shared<sf::Sprite>()),
                                                        m_rotateWithParent(true)
 {
 }
@@ -21,26 +21,26 @@ void SpriteComponent::update(const float deltaTime)
     }
 }
 
-void SpriteComponent::setScale(const float x, const float y)
+void SpriteComponent::setScale(const float x, const float y) const
 {
-    Vector2f newScale;
+    sf::Vector2f newScale;
     newScale.x = x;
-    newScale.y = y;;
+    newScale.y = y;
     m_sprite->setScale(newScale);
 }
 
-void SpriteComponent::setSmooth(const bool value)
+void SpriteComponent::setSmooth(const bool value) const
 {
     m_texture->setSmooth(value);
 }
 
 void SpriteComponent::setTexture(std::shared_ptr<sf::Texture> texture)
 {
-    m_texture = texture;
+    m_texture = std::move(texture);
     m_sprite->setTexture(*m_texture);
 }
 
-void SpriteComponent::setColor(sf::Color color)
+void SpriteComponent::setColor(sf::Color color) const
 {
     m_sprite->setColor(color);
 }
@@ -50,12 +50,12 @@ std::shared_ptr<sf::Texture> SpriteComponent::getTexture()
     return m_texture;
 }
 
-void SpriteComponent::setOrigin(const float x, const float y)
+void SpriteComponent::setOrigin(const float x, const float y) const
 {
     m_sprite->setOrigin(x, y);
 }
 
-sf::Vector2f SpriteComponent::getOrigin()
+sf::Vector2f SpriteComponent::getOrigin() const
 {
     return m_sprite->getOrigin();
 }
@@ -78,7 +78,7 @@ bool SpriteComponent::rotatesWithParent() const
 std::vector<std::weak_ptr<sf::Drawable>> SpriteComponent::getDrawables()
 {
     std::vector<std::weak_ptr<sf::Drawable>> result;
-    std::weak_ptr<sf::Drawable> weakSpr = m_sprite;
+    const std::weak_ptr<sf::Drawable> weakSpr = m_sprite;
     result.push_back(weakSpr);
     return result;
 }

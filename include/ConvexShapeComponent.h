@@ -15,7 +15,7 @@ public:
     ConvexShapeComponent(GameObject& parent);
     ~ConvexShapeComponent() override;
 
-    void setPointCount(const int& count);
+    void setPointCount(const int& count) const;
     int getPointCount() const;
 
     void setPoint(const int& index, const sf::Vector2f pos) const;

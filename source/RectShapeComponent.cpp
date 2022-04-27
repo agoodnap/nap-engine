@@ -1,8 +1,6 @@
 #include "RectShapeComponent.h"
 #include "GameObject.h"
 
-using namespace sf;
-
 RectShapeComponent::RectShapeComponent(GameObject& parent) : ShapeComponent(parent),
                                                              m_shape(std::make_shared<sf::RectangleShape>())
 {
@@ -33,7 +31,7 @@ void RectShapeComponent::setScale(const float x, const float y)
     {
         sf::Vector2f newScale;
         newScale.x = x;
-        newScale.y = y;;
+        newScale.y = y;
         m_shape->setScale(newScale);
     }
 }
@@ -131,7 +129,7 @@ std::shared_ptr<sf::Shape> RectShapeComponent::getShape()
 std::vector<std::weak_ptr<sf::Drawable>> RectShapeComponent::getDrawables()
 {
     std::vector<std::weak_ptr<sf::Drawable>> result;
-    std::weak_ptr<sf::Drawable> weakP = m_shape;
+    const std::weak_ptr<sf::Drawable> weakP = m_shape;
     result.push_back(weakP);
     return result;
 }

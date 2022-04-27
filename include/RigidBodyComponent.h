@@ -30,7 +30,7 @@ public:
     }
     virtual void update(const float deltaTime) override;
     sf::Vector2f getPosition() const;
-    void setPosition(const sf::Vector2f position);
+    void setPosition(const sf::Vector2f position) const;
     void setMass(const float& mass);
     float getMass() const;
     float getInvMass() const;
@@ -44,7 +44,7 @@ public:
     void addForce(const sf::Vector2f& force);
     void addImpulse(const sf::Vector2f& impulse);
 
-    void registerListener(std::shared_ptr<CollisionListener> listener);
+    void registerListener(const std::shared_ptr<CollisionListener>& listener);
     void onCollision(const RigidBodyComponent& other);
 
 

@@ -17,7 +17,7 @@ public:
 	static GameObjectManager& getInstance();
 
 	std::weak_ptr<GameObject> addGameObject(const std::string& name);
-	std::weak_ptr<GameObject> addGameObject(std::shared_ptr<GameObject> newObject);
+	std::weak_ptr<GameObject> addGameObject(const std::shared_ptr<GameObject>& newObject);
 	std::weak_ptr<GameObject> getGameObject(const std::string& name);
 	
 	std::vector<std::weak_ptr<GameObject>> getGameObjects() const;

@@ -25,8 +25,8 @@ private:
     PhysicsManager();
 
     void findCollisions();
-    void resolveCollisions();
-    bool AABBvsAABB(const sf::FloatRect& a, const sf::FloatRect& b, sf::Vector2f& normal, float& penetration);
+    void resolveCollisions() const;
+    bool AABBvsAABB(const sf::FloatRect& a, const sf::FloatRect& b, sf::Vector2f& normal, float& penetration) const;
 public:
     PhysicsManager(PhysicsManager const& copy) = delete;
     PhysicsManager& operator=(PhysicsManager const& copy) = delete;
@@ -34,5 +34,5 @@ public:
     static PhysicsManager& getInstance();
 
     void update(const float deltaTime);
-    void registerRigidBody(std::weak_ptr<RigidBodyComponent> rb);
+    void registerRigidBody(const std::weak_ptr<RigidBodyComponent>& rb);
 };

@@ -3,8 +3,6 @@
 #include "PhysicsManager.h"
 #include "RigidBodyComponent.h"
 
-using namespace sf;
-
 PhysicsManager& PhysicsManager::getInstance()
 {
     static PhysicsManager instance;
@@ -33,7 +31,7 @@ void PhysicsManager::update(const float deltaTime)
     }
 }
 
-void PhysicsManager::registerRigidBody(std::weak_ptr<RigidBodyComponent> rb)
+void PhysicsManager::registerRigidBody(const std::weak_ptr<RigidBodyComponent>& rb)
 {
     m_rigidBodies.push_back(rb);
 }
@@ -77,26 +75,28 @@ void PhysicsManager::findCollisions()
 
                     // if both object don't have a mass or body is the same skip
                     if (body1->getMass() == 0 && body2->getMass() == 0)
+                    {
                         continue;
+                    }
 
-                    Transform body1Transform;
+                    sf::Transform body1Transform;
                     body1Transform.translate(body1->getPosition());
-                    Transform body2Transform;
+                    sf::Transform body2Transform;
                     body2Transform.translate(body2->getPosition());
 
-                    Vector2f normal;
+                    sf::Vector2f normal;
                     float penetration;
                     auto body1Colliders = body1->getColliders();
                     auto body2Colliders = body2->getColliders();
                     bool collisionFound = false;
-                    for (auto col1 : body1Colliders)
+                    for (const auto& col1 : body1Colliders)
                     {
                         if (collisionFound)
                         {
                             break;
                         }
 
-                        for (auto col2 : body2Colliders)
+                        for (const auto& col2 : body2Colliders)
                         {
                             if (collisionFound)
                             {
@@ -131,9 +131,9 @@ void PhysicsManager::findCollisions()
     }
 }
 
-void PhysicsManager::resolveCollisions()
+void PhysicsManager::resolveCollisions() const
 {
-    for (auto man : m_manifolds)
+    for (const auto& man : m_manifolds)
     {
         // Calculate relative velocity
         auto body1 = man.body1.lock();
@@ -143,9 +143,8 @@ void PhysicsManager::resolveCollisions()
         {
             continue;
         }
-
-        body1->onCollision(*body2.get());
-        body2->onCollision(*body1.get());
+        body1->onCollision(*body2);
+        body2->onCollision(*body1);
 
         if (!man.doPhysicsResponse)
             continue;
@@ -153,10 +152,10 @@ void PhysicsManager::resolveCollisions()
         if (body1->getInvMass() == 0 && body2->getInvMass() == 0)
             continue;
 
-        Vector2f rv = body1->getVelocity() - body2->getVelocity();
+        const sf::Vector2f rv = body1->getVelocity() - body2->getVelocity();
 
         // Calculate relative velocity in terms of the normal direction (length through vector projection)
-        float velAlongNormal = rv.x * man.normal.x + rv.y * man.normal.y;
+        const float velAlongNormal = rv.x * man.normal.x + rv.y * man.normal.y;
 
         // Do not resolve if velocities are separating
         if (velAlongNormal > 0)
@@ -167,12 +166,12 @@ void PhysicsManager::resolveCollisions()
         if (body1->getBounciness() > 0 || body2->getBounciness() > 0)
         {
             // Calculate impulse scalar
-            const float e = (body1->getBounciness() + body2->getBounciness()) * 0.5f; //< 1.0 = all objects are bouncy
+            const float e = (body1->getBounciness() + body2->getBounciness()) * 0.5f; ///< 1.0 = all objects are bouncy
             float j = -(1 + e) * velAlongNormal;
             j /= body1->getInvMass() + body2->getInvMass();
 
             // Apply impulse
-            Vector2f impulse = j * man.normal;
+            sf::Vector2f impulse = j * man.normal;
 
             // impulse proportional to mass
             body1->setVelocity(body1->getVelocity() + body1->getInvMass() * impulse);
@@ -181,16 +180,16 @@ void PhysicsManager::resolveCollisions()
         else
         {
             // Apply impulse
-            Vector2f impulse = velAlongNormal * man.normal;
+            sf::Vector2f impulse = velAlongNormal * man.normal;
 
             body1->setVelocity(body1->getVelocity() - body1->getInvMass() * impulse);
             body2->setVelocity(body2->getVelocity() + body2->getInvMass() * impulse);
         }
 
         // Positional correction
-        const float percent = 0.2f; // usually 20% to 80%
-        const float slop = 0.01f; // usually 0.01 to 0.1
-        Vector2f correction = std::max(man.penetration - slop, 0.0f) /
+        constexpr float percent = 0.2f; // usually 20% to 80%
+        constexpr float slop = 0.01f; // usually 0.01 to 0.1
+        sf::Vector2f correction = std::max(man.penetration - slop, 0.0f) /
             (body1->getInvMass() + body2->getInvMass()) * percent * man.normal;
         // Apply directly to position
         body1->setPosition(body1->getPosition() + body1->getInvMass() * correction);
@@ -198,24 +197,24 @@ void PhysicsManager::resolveCollisions()
     }
 }
 
-bool PhysicsManager::AABBvsAABB(const FloatRect& a, const FloatRect& b, Vector2f& normal, float& penetration)
+bool PhysicsManager::AABBvsAABB(const sf::FloatRect& a, const sf::FloatRect& b, sf::Vector2f& normal, float& penetration) const
 {
-    auto getCenter = [](const sf::FloatRect& rect) -> Vector2f
+    auto getCenter = [](const sf::FloatRect& rect) -> sf::Vector2f
     {
-        auto result = Vector2f(rect.left, rect.top) + 0.5f * Vector2f(rect.width, rect.height);
+        const auto result = sf::Vector2f(rect.left, rect.top) + 0.5f * sf::Vector2f(rect.width, rect.height);
         return result;
     };
-    
-    Vector2f n = getCenter(b) - getCenter(a); // Vector from A to B
+
+    const sf::Vector2f n = getCenter(b) - getCenter(a); // Vector from A to B
     float a_extent = a.width * 0.5f; // Calculate half extents along x axis
     float b_extent = b.width * 0.5f;
-    float x_overlap = a_extent + b_extent - abs(n.x) * 0.5f; // Calculate overlap on x axis
+    const float x_overlap = a_extent + b_extent - abs(n.x) * 0.5f; // Calculate overlap on x axis
     if (x_overlap > 0)
     {
         // SAT test on x axis
         a_extent = a.height * 0.5f; // Calculate half extents along y axis
         b_extent = b.height * 0.5f;
-        float y_overlap = a_extent + b_extent - abs(n.y) * 0.5f; // Calculate overlap on y axis
+        const float y_overlap = a_extent + b_extent - abs(n.y) * 0.5f; // Calculate overlap on y axis
         if (y_overlap > 0)
         {
             // SAT test on y axis
@@ -223,18 +222,18 @@ bool PhysicsManager::AABBvsAABB(const FloatRect& a, const FloatRect& b, Vector2f
             {
                 // Find out which axis is axis of least penetration
                 if (n.x < 0) // Point towards B knowing that n points from A to B
-                    normal = Vector2f(1.0f, 0.0f);
+                    normal = sf::Vector2f(1.0f, 0.0f);
                 else
-                    normal = Vector2f(-1.0f, 0.0f);
+                    normal = sf::Vector2f(-1.0f, 0.0f);
                 penetration = x_overlap;
                 return true;
             }
             else
             {
                 if (n.y < 0) // Point towards B knowing that n points from A to B
-                    normal = Vector2f(0, 1);
+                    normal = sf::Vector2f(0, 1);
                 else
-                    normal = Vector2f(0, -1);
+                    normal = sf::Vector2f(0, -1);
                 penetration = y_overlap;
                 return true;
             }
