@@ -203,7 +203,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)/lib/SFML/lib/</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
